@@ -7,8 +7,8 @@ https://8weeksqlchallenge.com/case-study-1/
 
 ```sql
 SELECT 
-	s.customer_id AS customer_id,
-  SUM(price) AS total_amount
+  s.customer_id AS customer_id,
+  SUM(price) AS total_amount,
 FROM sales s
 JOIN menu m ON s.product_id = m.product_id
 GROUP BY s.customer_id
@@ -45,7 +45,7 @@ ORDER BY customer_id;
 
 ```sql
 SELECT DISTINCT
-	s.customer_id AS customer_id,
+  s.customer_id AS customer_id,
   m.product_name AS first_item_purchased
 FROM sales s
 JOIN menu m ON s.product_id = m.product_id
