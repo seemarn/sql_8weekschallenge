@@ -85,24 +85,140 @@ LIMIT 1;
 
 **5. Which item was the most popular for each customer?**
 
+```sql
+WITH popularity AS(
+SELECT
+  	customer_id,
+    product_name,
+    COUNT(product_name) AS count,
+    DENSE_RANK() OVER (PARTITION BY customer_id ORDER BY COUNT(product_name) DESC) AS rnk
+FROM sales s
+JOIN menu m ON s.product_id = m.product_id
+GROUP BY s.customer_id, m.product_name
+ORDER BY s.customer_id, count DESC)
+
+SELECT customer_id, product_name, count
+FROM popularity
+WHERE rnk = 1
+```
+
 ### Answer
+| customer_id | product_name | count |
+| ----------- | ------------ | ----- |
+| A           | ramen        | 3     |
+| B           | ramen        | 2     |
+| B           | curry        | 2     |
+| B           | sushi        | 2     |
+| C           | ramen        | 3     |
+
 
 **6. Which item was purchased first by the customer after they became a member?**
 
+```sql
+WITH members_first_purchased AS (
+SELECT 
+	s.customer_id,
+    s.order_date,
+    m.product_name,
+    DENSE_RANK() OVER (PARTITION BY s.customer_id ORDER BY order_date) AS rnk
+FROM sales s
+LEFT JOIN menu m ON s.product_id = m.product_id
+LEFT JOIN members mem ON s.customer_id = mem.customer_id
+WHERE join_date < order_date
+ORDER BY s.customer_id, s.order_date)
+
+SELECT customer_id, product_name
+FROM members_first_purchased
+WHERE rnk = 1
+```
+
 ### Answer
+| customer_id | product_name |
+| ----------- | ------------ |
+| A           | ramen        |
+| B           | sushi        |
+
 
 **7. Which item was purchased just before the customer became a member?**
 
+```sql
+WITH members_purchased_before AS(
+SELECT 
+	s.customer_id,
+    s.order_date,
+    m.product_name,
+    RANK() OVER (PARTITION BY s.customer_id ORDER BY order_date DESC) AS rnk
+FROM sales s
+LEFT JOIN menu m ON s.product_id = m.product_id
+LEFT JOIN members mem ON s.customer_id = mem.customer_id
+WHERE join_date > order_date
+ORDER BY s.customer_id, s.order_date)
+
+SELECT customer_id, product_name
+FROM members_purchased_before
+WHERE rnk = 1
+```
+
 ### Answer
+| customer_id | product_name |
+| ----------- | ------------ |
+| A           | sushi        |
+| A           | curry        |
+| B           | sushi        |
 
 **8. What is the total items and amount spent for each member before they became a member?**
 
+```sql
+SELECT 
+	s.customer_id,
+    COUNT(s.product_id) AS count_items,
+    SUM(price) AS amount_spent
+FROM sales s
+LEFT JOIN menu m ON s.product_id = m.product_id
+LEFT JOIN members mem ON s.customer_id = mem.customer_id
+WHERE join_date > order_date
+GROUP BY s.customer_id
+ORDER BY s.customer_id
+```
+
 ### Answer
+| customer_id | count_items | amount_spent |
+| ----------- | ----------- | ------------ |
+| A           | 2           | 25           |
+| B           | 3           | 40           |
+
 
 **9.  If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?**
 
+```sql
+WITH menu_points AS(
+SELECT 
+    product_id,
+    CASE WHEN product_id = 1 THEN price * 20 ELSE price * 10 END AS points
+FROM menu)
+
+SELECT 
+	customer_id,
+    SUM(points) AS total_points
+FROM sales s
+LEFT JOIN menu_points mp ON s.product_id = mp.product_id
+GROUP BY customer_id
+ORDER BY customer_id
+```
+
 ### Answer
+| customer_id | total_points |
+| ----------- | ------------ |
+| A           | 860          |
+| B           | 940          |
+| C           | 360          |
 
 **10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?**
 
+```sql
+
+```
+
 ### Answer
+
+## Bonus Questions
