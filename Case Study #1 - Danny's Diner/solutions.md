@@ -216,9 +216,28 @@ ORDER BY customer_id
 **10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?**
 
 ```sql
+WITH menu_points AS(
+SELECT 
+  product_id,
+  (price*20) AS first_week_points,
+  CASE WHEN product_id = 1 THEN price * 20 ELSE price * 10 END AS points
+FROM menu)
 
+SELECT 
+	s.customer_id,
+    SUM(CASE WHEN (s.order_date-mem.join_date) BETWEEN 0 AND 6 THEN first_week_points ELSE points END) AS total_points
+FROM sales s
+LEFT JOIN members mem ON s.customer_id = mem.customer_id
+LEFT JOIN menu_points mp ON s.product_id = mp.product_id
+WHERE s.order_date >= mem.join_date AND s.order_date BETWEEN '2021-01-01' AND '2021-01-31' 
+GROUP BY s.customer_id
+ORDER BY s.customer_id
 ```
 
 ### Answer
+| customer_id | total_points |
+| ----------- | ------------ |
+| A           | 1020         |
+| B           | 320          |
 
 ## Bonus Questions
