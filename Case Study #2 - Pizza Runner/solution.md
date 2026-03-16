@@ -2,7 +2,7 @@ Case Study #2 - Pizza Runner
 
 https://8weeksqlchallenge.com/case-study-2/
 
-- [Pizza Metrics]#a-pizza-metrics)
+- [Pizza Metrics](#a-pizza-metrics)
 - [Runner and Customer Experience](### B. Runner and Customer Experience)
 
 ## Entity Relationship Diagram
