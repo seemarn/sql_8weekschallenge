@@ -16,6 +16,7 @@ FROM customer_orders
 ```
 
 **Answer**
+
 <img width="224" height="100" alt="image" src="https://github.com/user-attachments/assets/b6d14240-3adc-4b02-b4e9-4099c56063fc" />
 
 
@@ -27,6 +28,7 @@ FROM customer_orders
 ```
 
 **Answer**
+
 <img width="263" height="108" alt="image" src="https://github.com/user-attachments/assets/71c02b5e-a950-42d9-83a5-1b3bb6ea6c1b" />
 
 
@@ -41,6 +43,7 @@ GROUP BY runner_id
 ```
 
 **Answer**
+
 <img width="322" height="147" alt="image" src="https://github.com/user-attachments/assets/3399f0c9-e3ff-48ea-abfa-ab42874c0c1c" />
 
 
@@ -57,6 +60,7 @@ GROUP BY co.pizza_id, pn.pizza_name
 ```
 
 **Answer**
+
 <img width="378" height="138" alt="image" src="https://github.com/user-attachments/assets/37b05eda-f5fc-4aa9-bfde-e0a90163b1fd" />
 
 
@@ -72,16 +76,26 @@ ORDER BY co.customer_id, pn.pizza_name
 ```
 
 **Answer**
+
 <img width="339" height="284" alt="image" src="https://github.com/user-attachments/assets/244d9455-50b6-4137-9e3e-310524613af8" />
 
 
 **6. What was the maximum number of pizzas delivered in a single order?**
 
 ```sql
-
+SELECT co.customer_id, co.order_id,
+COUNT(co.pizza_id) AS num
+FROM customer_orders co
+LEFT JOIN runner_orders pn ON co.order_id = pn.order_id
+WHERE distance != 0
+GROUP BY co.order_id, co.customer_id
+ORDER BY num DESC
+LIMIT 1
 ```
 
 **Answer**
+
+<img width="309" height="93" alt="image" src="https://github.com/user-attachments/assets/4e652f0e-391a-4c8a-bc6f-80ba29942638" />
 
 
 **7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?**
