@@ -2,6 +2,9 @@ Case Study #2 - Pizza Runner
 
 https://8weeksqlchallenge.com/case-study-2/
 
+- [Pizza Metrics](### A. Pizza Metrics)
+- [Runner and Customer Experience](### B. Runner and Customer Experience)
+
 ## Entity Relationship Diagram
 <img width="598" height="307" alt="image" src="https://github.com/user-attachments/assets/de68cd21-5980-4496-a864-c3a1c70f28b4" />
 
@@ -101,36 +104,76 @@ LIMIT 1
 **7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?**
 
 ```sql
-
+SELECT 
+	co.customer_id, 
+    SUM(CASE 
+        WHEN (co.exclusions IS NULL OR co.exclusions IN ('', 'null')) 
+         AND (co.extras IS NULL OR co.extras IN ('', 'null')) 
+        THEN 1 ELSE 0 END) AS no_changes,
+    SUM(CASE 
+        WHEN (co.exclusions IS NOT NULL AND co.exclusions NOT IN ('', 'null')) 
+          OR (co.extras IS NOT NULL AND co.extras NOT IN ('', 'null')) 
+        THEN 1 ELSE 0 END) AS with_changes
+FROM customer_orders co
+JOIN runner_orders pn ON co.order_id = pn.order_id
+WHERE pn.distance != '0'
+GROUP BY co.customer_id;
 ```
 
 **Answer**
+
+<img width="403" height="214" alt="image" src="https://github.com/user-attachments/assets/723dc34e-740e-4415-b5d9-39d6566fdb85" />
 
 
 **8. How many pizzas were delivered that had both exclusions and extras?**
 
 ```sql
-
+SELECT
+	co.customer_id, 
+    SUM(CASE 
+        WHEN (co.exclusions IS NOT NULL AND co.exclusions NOT IN ('', 'null')) 
+          AND (co.extras IS NOT NULL AND co.extras NOT IN ('', 'null')) 
+        THEN 1 ELSE 0 END) AS with_changes
+FROM customer_orders co
+JOIN runner_orders pn ON co.order_id = pn.order_id
+WHERE pn.distance != 0
+GROUP BY co.customer_id
 ```
 
 **Answer**
+
+<img width="282" height="199" alt="image" src="https://github.com/user-attachments/assets/421b4bd4-4abf-4661-a130-323f42393241" />
 
 
 **9. What was the total volume of pizzas ordered for each hour of the day?**
 
 ```sql
-
+SELECT
+  EXTRACT(HOUR FROM order_time) AS hours,
+  COUNT(order_id) AS num_pizza
+FROM customer_orders
+GROUP BY hours
+ORDER BY hours
 ```
 
 **Answer**
+
+<img width="215" height="230" alt="image" src="https://github.com/user-attachments/assets/d6c25e73-325b-48b9-b17c-ae738ecd33e1" />
 
 
 **10. What was the volume of orders for each day of the week?**
 
 ```sql
-
+SELECT 
+    DAYNAME(order_time) AS day_of_week,
+    COUNT(order_id) AS num_orders
+FROM customer_orders
+GROUP BY day_of_week, DAYOFWEEK(order_time)
+ORDER BY DAYOFWEEK(order_time);
 ```
 
 **Answer**
+
+<img width="282" height="184" alt="image" src="https://github.com/user-attachments/assets/1a8d35db-f08d-4ebc-b562-5ae5df3f8f09" />
 
 ### B. Runner and Customer Experience
