@@ -177,3 +177,125 @@ ORDER BY DAYOFWEEK(order_time);
 <img width="282" height="184" alt="image" src="https://github.com/user-attachments/assets/1a8d35db-f08d-4ebc-b562-5ae5df3f8f09" />
 
 ### B. Runner and Customer Experience
+**1. How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)**
+
+```sql
+SELECT 
+    FLOOR(DATEDIFF(registration_date, '2021-01-01') / 7) + 1 AS reg_week,
+    COUNT(runner_id) AS num_signup
+FROM runners
+GROUP BY reg_week
+```
+
+**Answer**
+
+<img width="255" height="141" alt="image" src="https://github.com/user-attachments/assets/ae322d08-b9b4-4257-9335-447e22f1aea3" />
+
+
+**2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?**
+
+```sql
+WITH time_to_reach AS (
+SELECT 
+    runner_id,
+    CAST(ro.pickup_time AS TIME) AS pickup_time,
+    CAST(co.order_time AS TIME) AS order_time,
+    TIMESTAMPDIFF(MINUTE, order_time, pickup_time) AS time_taken
+FROM runner_orders ro
+JOIN customer_orders co ON ro.order_id = co.order_id
+WHERE ro.distance != 0
+ORDER BY runner_id)
+
+SELECT 
+    runner_id, 
+    ROUND(AVG(time_taken), 2) AS avg_time_taken
+FROM time_to_reach
+GROUP BY runner_id
+```
+
+**Answer**
+
+<img width="292" height="142" alt="image" src="https://github.com/user-attachments/assets/5ed7d4c6-1cd3-44b9-ae59-9410b739e51b" />
+
+
+**3. Is there any relationship between the number of pizzas and how long the order takes to prepare?**
+
+```sql
+WITH time_table AS (
+SELECT 
+    ro.order_id,
+    COUNT(pizza_id) AS num_pizza,
+    CAST(ro.pickup_time AS TIME) AS pickup_time,
+    CAST(co.order_time AS TIME) AS order_time,
+    TIMESTAMPDIFF(MINUTE, order_time, pickup_time) AS time_taken
+FROM runner_orders ro
+LEFT JOIN customer_orders co ON ro.order_id = co.order_id
+WHERE ro.distance != 0
+GROUP BY ro.order_id, pickup_time, order_time)
+
+SELECT 
+    num_pizza,
+    ROUND(AVG(time_taken), 2) AS avg_time_per_order,
+    ROUND(AVG(time_taken) / num_pizza, 2) AS avg_time_per_pizza
+FROM time_table
+GROUP BY num_pizza
+ORDER BY num_pizza
+```
+
+**Answer**
+
+<img width="487" height="148" alt="image" src="https://github.com/user-attachments/assets/9c1adeb6-4e8c-4554-9162-46c9587dc743" />
+
+
+**4. What was the average distance travelled for each customer?**
+
+```sql
+SELECT 
+    customer_id,
+    ROUND(AVG(distance),2) AS avg_dist
+FROM customer_orders co
+JOIN runner_orders ro ON co.order_id = ro.order_id
+WHERE distance != 0
+GROUP BY customer_id
+ORDER BY customer_id
+```
+
+**Answer**
+
+<img width="233" height="191" alt="image" src="https://github.com/user-attachments/assets/f3a44ee4-4cb3-457a-befa-86d3acacd92f" />
+
+
+**5. What was the difference between the longest and shortest delivery times for all orders?**
+
+```sql
+SELECT 
+    MAX(duration) AS max_duration,
+    CAST(MIN(duration) AS FLOAT) AS min_duration,
+    MAX(duration) - MIN(duration) AS diff
+FROM runner_orders ro 
+WHERE distance != 0
+```
+
+**Answer**
+
+<img width="353" height="98" alt="image" src="https://github.com/user-attachments/assets/489610bf-9db3-4cef-8177-a854ac82a0e8" />
+
+
+**6. What was the average speed for each runner for each delivery and do you notice any trend for these values?**
+speed = distance/hour
+
+```sql
+
+```
+
+**Answer**
+
+
+**7. What is the successful delivery percentage for each runner?**
+
+```sql
+
+```
+
+**Answer**
+
