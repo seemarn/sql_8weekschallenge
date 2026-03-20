@@ -328,16 +328,7 @@ ORDER BY runner_id
 #### 1. What are the standard ingredients for each pizza?
 
 ```sql
-SELECT 
-    runner_id,
-    ROUND((SUM(CASE
-                WHEN distance != 0 THEN 1
-                ELSE 0
-            END) / COUNT(order_id)) * 100,
-            0) AS success_percentage
-FROM runner_orders ro
-GROUP BY runner_id
-ORDER BY runner_id
+
 ```
 
 **Answer**
@@ -346,16 +337,7 @@ ORDER BY runner_id
 #### 2. What was the most commonly added extra?
 
 ```sql
-SELECT 
-    runner_id,
-    ROUND((SUM(CASE
-                WHEN distance != 0 THEN 1
-                ELSE 0
-            END) / COUNT(order_id)) * 100,
-            0) AS success_percentage
-FROM runner_orders ro
-GROUP BY runner_id
-ORDER BY runner_id
+
 ```
 
 **Answer**
@@ -365,16 +347,7 @@ ORDER BY runner_id
 #### 3. What was the most common exclusion?
 
 ```sql
-SELECT 
-    runner_id,
-    ROUND((SUM(CASE
-                WHEN distance != 0 THEN 1
-                ELSE 0
-            END) / COUNT(order_id)) * 100,
-            0) AS success_percentage
-FROM runner_orders ro
-GROUP BY runner_id
-ORDER BY runner_id
+
 ```
 
 **Answer**
@@ -389,16 +362,7 @@ ORDER BY runner_id
 
 
 ```sql
-SELECT 
-    runner_id,
-    ROUND((SUM(CASE
-                WHEN distance != 0 THEN 1
-                ELSE 0
-            END) / COUNT(order_id)) * 100,
-            0) AS success_percentage
-FROM runner_orders ro
-GROUP BY runner_id
-ORDER BY runner_id
+
 ```
 
 **Answer**
@@ -409,16 +373,7 @@ ORDER BY runner_id
 - For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
 
 ```sql
-SELECT 
-    runner_id,
-    ROUND((SUM(CASE
-                WHEN distance != 0 THEN 1
-                ELSE 0
-            END) / COUNT(order_id)) * 100,
-            0) AS success_percentage
-FROM runner_orders ro
-GROUP BY runner_id
-ORDER BY runner_id
+
 ```
 
 **Answer**
@@ -427,16 +382,7 @@ ORDER BY runner_id
 #### 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
 
 ```sql
-SELECT 
-    runner_id,
-    ROUND((SUM(CASE
-                WHEN distance != 0 THEN 1
-                ELSE 0
-            END) / COUNT(order_id)) * 100,
-            0) AS success_percentage
-FROM runner_orders ro
-GROUP BY runner_id
-ORDER BY runner_id
+
 ```
 
 **Answer**
