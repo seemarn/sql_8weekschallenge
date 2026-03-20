@@ -4,6 +4,7 @@ https://8weeksqlchallenge.com/case-study-2/
 
 - [Pizza Metrics](#a-pizza-metrics)
 - [Runner and Customer Experience](#b-runner-and-customer-experience)
+- [Ingredient Optimisation](#c-ingredient-optimisation)
 
 ## Entity Relationship Diagram
 <img width="598" height="307" alt="image" src="https://github.com/user-attachments/assets/de68cd21-5980-4496-a864-c3a1c70f28b4" />
@@ -11,7 +12,7 @@ https://8weeksqlchallenge.com/case-study-2/
 
 ## Questions and Solutions
 ### A. Pizza Metrics
-**1. How many pizzas were ordered?**
+#### 1. How many pizzas were ordered?
 
 ```sql
 SELECT COUNT(*) AS count_pizzas_order
@@ -23,7 +24,7 @@ FROM customer_orders
 <img width="224" height="100" alt="image" src="https://github.com/user-attachments/assets/b6d14240-3adc-4b02-b4e9-4099c56063fc" />
 
 
-**2. How many unique customer orders were made?**
+#### 2. How many unique customer orders were made?
 
 ```sql
 SELECT COUNT(DISTINCT order_id) AS unique_customer_orders
@@ -35,7 +36,7 @@ FROM customer_orders
 <img width="263" height="108" alt="image" src="https://github.com/user-attachments/assets/71c02b5e-a950-42d9-83a5-1b3bb6ea6c1b" />
 
 
-**3. How many successful orders were delivered by each runner?**
+#### 3. How many successful orders were delivered by each runner?
 
 ```sql
 SELECT runner_id, 
@@ -50,7 +51,7 @@ GROUP BY runner_id
 <img width="322" height="147" alt="image" src="https://github.com/user-attachments/assets/3399f0c9-e3ff-48ea-abfa-ab42874c0c1c" />
 
 
-**4. How many of each type of pizza was delivered?**
+#### 4. How many of each type of pizza was delivered?
 
 ```sql
 SELECT co.pizza_id, pn.pizza_name,
@@ -67,7 +68,7 @@ GROUP BY co.pizza_id, pn.pizza_name
 <img width="378" height="138" alt="image" src="https://github.com/user-attachments/assets/37b05eda-f5fc-4aa9-bfde-e0a90163b1fd" />
 
 
-**5. How many Vegetarian and Meatlovers were ordered by each customer?**
+#### 5. How many Vegetarian and Meatlovers were ordered by each customer?
 
 ```sql
 SELECT co.customer_id, pn.pizza_name,
@@ -83,7 +84,7 @@ ORDER BY co.customer_id, pn.pizza_name
 <img width="339" height="284" alt="image" src="https://github.com/user-attachments/assets/244d9455-50b6-4137-9e3e-310524613af8" />
 
 
-**6. What was the maximum number of pizzas delivered in a single order?**
+#### 6. What was the maximum number of pizzas delivered in a single order?
 
 ```sql
 SELECT co.customer_id, co.order_id,
@@ -101,7 +102,7 @@ LIMIT 1
 <img width="309" height="93" alt="image" src="https://github.com/user-attachments/assets/4e652f0e-391a-4c8a-bc6f-80ba29942638" />
 
 
-**7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?**
+#### 7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
 
 ```sql
 SELECT 
@@ -125,7 +126,7 @@ GROUP BY co.customer_id;
 <img width="403" height="214" alt="image" src="https://github.com/user-attachments/assets/723dc34e-740e-4415-b5d9-39d6566fdb85" />
 
 
-**8. How many pizzas were delivered that had both exclusions and extras?**
+#### 8. How many pizzas were delivered that had both exclusions and extras?
 
 ```sql
 SELECT
@@ -145,7 +146,7 @@ GROUP BY co.customer_id
 <img width="282" height="199" alt="image" src="https://github.com/user-attachments/assets/421b4bd4-4abf-4661-a130-323f42393241" />
 
 
-**9. What was the total volume of pizzas ordered for each hour of the day?**
+#### 9. What was the total volume of pizzas ordered for each hour of the day?
 
 ```sql
 SELECT
@@ -161,7 +162,7 @@ ORDER BY hours
 <img width="215" height="230" alt="image" src="https://github.com/user-attachments/assets/d6c25e73-325b-48b9-b17c-ae738ecd33e1" />
 
 
-**10. What was the volume of orders for each day of the week?**
+#### 10. What was the volume of orders for each day of the week?
 
 ```sql
 SELECT 
@@ -177,7 +178,7 @@ ORDER BY DAYOFWEEK(order_time);
 <img width="282" height="184" alt="image" src="https://github.com/user-attachments/assets/1a8d35db-f08d-4ebc-b562-5ae5df3f8f09" />
 
 ### B. Runner and Customer Experience
-**1. How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)**
+#### 1. How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
 
 ```sql
 SELECT 
@@ -192,7 +193,7 @@ GROUP BY reg_week
 <img width="255" height="141" alt="image" src="https://github.com/user-attachments/assets/ae322d08-b9b4-4257-9335-447e22f1aea3" />
 
 
-**2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?**
+#### 2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
 
 ```sql
 WITH time_to_reach AS (
@@ -218,7 +219,7 @@ GROUP BY runner_id
 <img width="292" height="142" alt="image" src="https://github.com/user-attachments/assets/5ed7d4c6-1cd3-44b9-ae59-9410b739e51b" />
 
 
-**3. Is there any relationship between the number of pizzas and how long the order takes to prepare?**
+#### 3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
 
 ```sql
 WITH time_table AS (
@@ -247,7 +248,7 @@ ORDER BY num_pizza
 <img width="487" height="148" alt="image" src="https://github.com/user-attachments/assets/9c1adeb6-4e8c-4554-9162-46c9587dc743" />
 
 
-**4. What was the average distance travelled for each customer?**
+#### 4. What was the average distance travelled for each customer?
 
 ```sql
 SELECT 
@@ -265,7 +266,7 @@ ORDER BY customer_id
 <img width="233" height="191" alt="image" src="https://github.com/user-attachments/assets/f3a44ee4-4cb3-457a-befa-86d3acacd92f" />
 
 
-**5. What was the difference between the longest and shortest delivery times for all orders?**
+#### 5. What was the difference between the longest and shortest delivery times for all orders?
 
 ```sql
 SELECT 
@@ -281,20 +282,161 @@ WHERE distance != 0
 <img width="353" height="98" alt="image" src="https://github.com/user-attachments/assets/489610bf-9db3-4cef-8177-a854ac82a0e8" />
 
 
-**6. What was the average speed for each runner for each delivery and do you notice any trend for these values?**
+#### 6. What was the average speed for each runner for each delivery and do you notice any trend for these values?
 speed = distance/hour
 
 ```sql
+SELECT 
+    order_id,
+    runner_id,
+    CAST(distance AS FLOAT) AS distance_in_km,
+    ROUND((duration/60),2) AS duration_in_hrs,
+    ROUND(distance/(duration/60),2) AS speed
+FROM runner_orders ro 
+WHERE distance != 0
+ORDER BY runner_id
+```
 
+**Answer**
+
+<img width="571" height="284" alt="image" src="https://github.com/user-attachments/assets/3ef09917-1c81-4f8f-a3dd-6a3d3de8f9d5" />
+
+- Runner 1 range speed from 37.5km/h to 60km/h
+- Runner 2 range speed from 35.1km/h to 93.6km/h
+- Runner 3 speed is 40km/h
+
+#### 7. What is the successful delivery percentage for each runner?
+
+```sql
+SELECT 
+    runner_id,
+    ROUND((SUM(CASE
+                WHEN distance != 0 THEN 1
+                ELSE 0
+            END) / COUNT(order_id)) * 100,
+            0) AS success_percentage
+FROM runner_orders ro
+GROUP BY runner_id
+ORDER BY runner_id
+```
+
+**Answer**
+
+<img width="326" height="145" alt="image" src="https://github.com/user-attachments/assets/0f074cd2-957d-4f09-b31f-3e1aec8116c0" />
+
+### C. Ingredient Optimisation
+#### 1. What are the standard ingredients for each pizza?
+
+```sql
+SELECT 
+    runner_id,
+    ROUND((SUM(CASE
+                WHEN distance != 0 THEN 1
+                ELSE 0
+            END) / COUNT(order_id)) * 100,
+            0) AS success_percentage
+FROM runner_orders ro
+GROUP BY runner_id
+ORDER BY runner_id
 ```
 
 **Answer**
 
 
-**7. What is the successful delivery percentage for each runner?**
+#### 2. What was the most commonly added extra?
 
 ```sql
+SELECT 
+    runner_id,
+    ROUND((SUM(CASE
+                WHEN distance != 0 THEN 1
+                ELSE 0
+            END) / COUNT(order_id)) * 100,
+            0) AS success_percentage
+FROM runner_orders ro
+GROUP BY runner_id
+ORDER BY runner_id
+```
 
+**Answer**
+
+
+
+#### 3. What was the most common exclusion?
+
+```sql
+SELECT 
+    runner_id,
+    ROUND((SUM(CASE
+                WHEN distance != 0 THEN 1
+                ELSE 0
+            END) / COUNT(order_id)) * 100,
+            0) AS success_percentage
+FROM runner_orders ro
+GROUP BY runner_id
+ORDER BY runner_id
+```
+
+**Answer**
+
+
+
+#### 4. Generate an order item for each record in the customers_orders table in the format of one of the following:
+- Meat Lovers
+- Meat Lovers - Exclude Beef
+- Meat Lovers - Extra Bacon
+- Meat Lovers - Exclude Cheese, Bacon - Extra Mushroom, Peppers
+
+
+```sql
+SELECT 
+    runner_id,
+    ROUND((SUM(CASE
+                WHEN distance != 0 THEN 1
+                ELSE 0
+            END) / COUNT(order_id)) * 100,
+            0) AS success_percentage
+FROM runner_orders ro
+GROUP BY runner_id
+ORDER BY runner_id
+```
+
+**Answer**
+
+
+
+#### 5. Generate an alphabetically ordered comma separated ingredient list for each pizza order from the customer_orders table and add a 2x in front of any relevant ingredients
+- For example: "Meat Lovers: 2xBacon, Beef, ... , Salami"
+
+```sql
+SELECT 
+    runner_id,
+    ROUND((SUM(CASE
+                WHEN distance != 0 THEN 1
+                ELSE 0
+            END) / COUNT(order_id)) * 100,
+            0) AS success_percentage
+FROM runner_orders ro
+GROUP BY runner_id
+ORDER BY runner_id
+```
+
+**Answer**
+
+
+#### 6. What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+
+```sql
+SELECT 
+    runner_id,
+    ROUND((SUM(CASE
+                WHEN distance != 0 THEN 1
+                ELSE 0
+            END) / COUNT(order_id)) * 100,
+            0) AS success_percentage
+FROM runner_orders ro
+GROUP BY runner_id
+ORDER BY runner_id
 ```
 
 **Answer**
