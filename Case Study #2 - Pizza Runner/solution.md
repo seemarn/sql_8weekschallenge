@@ -328,10 +328,20 @@ ORDER BY runner_id
 #### 1. What are the standard ingredients for each pizza?
 
 ```sql
-
+SELECT 
+    pr.pizza_id,
+    pn.pizza_name,
+    STRING_AGG(pt.topping_name, ', ') AS topping_list
+FROM pizza_recipes pr
+CROSS JOIN LATERAL UNNEST(STRING_TO_ARRAY(pr.toppings, ', ')) AS t_id
+JOIN pizza_toppings pt ON pt.topping_id = t_id::INT
+JOIN pizza_names pn ON pr.pizza_id = pn.pizza_id
+GROUP BY pr.pizza_id, pn.pizza_name
 ```
 
 **Answer**
+<img width="1236" height="313" alt="image" src="https://github.com/user-attachments/assets/b2e8d52f-5984-4c2e-8ae1-aa15dce6e1c8" />
+
 
 
 #### 2. What was the most commonly added extra?
