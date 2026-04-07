@@ -347,20 +347,52 @@ GROUP BY pr.pizza_id, pn.pizza_name
 #### 2. What was the most commonly added extra?
 
 ```sql
+WITH extra AS(
+SELECT
+	order_id,
+    CAST(UNNEST(STRING_TO_ARRAY(co.extras, ', ')) AS INTEGER) AS extras
+FROM customer_orders co
+WHERE co.extras NOT IN ('', 'null'))
 
+SELECT 
+	extras,
+    COUNT(extras) AS num_extras,
+    topping_name
+FROM extra
+JOIN pizza_toppings pt ON extra.extras = pt.topping_id
+GROUP BY extras, topping_name
+ORDER BY num_extras DESC
+LIMIT 1
 ```
 
 **Answer**
+<img width="1636" height="258" alt="image" src="https://github.com/user-attachments/assets/27ccf9b9-a0e8-4973-a1e4-313906533997" />
 
 
 
 #### 3. What was the most common exclusion?
 
 ```sql
+WITH exclusion AS(
+SELECT
+	order_id,
+    CAST(UNNEST(STRING_TO_ARRAY(co.exclusions, ', ')) AS INTEGER) AS exclusion_id
+FROM customer_orders co
+WHERE co.exclusions NOT IN ('', 'null'))
 
+SELECT 
+	exclusion_id,
+    COUNT(exclusion_id) AS num_exclusions,
+    topping_name
+FROM exclusion
+JOIN pizza_toppings pt ON exclusion.exclusion_id = pt.topping_id
+GROUP BY exclusion_id, topping_name
+ORDER BY num_exclusions DESC
+LIMIT 1
 ```
 
 **Answer**
+<img width="1464" height="258" alt="image" src="https://github.com/user-attachments/assets/83786efc-829e-4b8f-b9cb-176e0c3ec0a8" />
 
 
 
